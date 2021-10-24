@@ -1,5 +1,7 @@
 abstract class Strings {
   // Error messages
+  static errorExpiredToken = "Token expired";
+  static errorInvalidToken = "Token not provided";
   static errorInvalidGitHubAccessToken = "Token ivalid, try again";
 
   static gitHubUserUrl = "https://API.github.com/user";

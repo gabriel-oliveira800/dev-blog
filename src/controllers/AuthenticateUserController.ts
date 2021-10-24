@@ -12,13 +12,7 @@ class AuthenticateUserController {
       const result = await use(AuthenticateUserService).execute(code);
       return response.json(result);
     } catch (error) {
-      if (error?.response?.status === 401 ?? false) {
-        return response.status(401).json({
-          error: Strings.errorInvalidGitHubAccessToken,
-        });
-      }
-
-      return response.status(500).json({ error: error.message });
+      return response.status(401).json({ error: error.message });
     }
   }
 }
