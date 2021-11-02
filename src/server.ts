@@ -1,12 +1,13 @@
-import "dotenv/config";
 import express from "express";
 import morgan from "morgan";
+import cors from "cors";
+import "dotenv/config";
 
 import "./binds";
 import router from "./routes/routes";
-import { Strings } from "./helpers";
 
 const app = express();
+app.use(cors());
 
 app.use(morgan("tiny"));
 app.use(express.json());

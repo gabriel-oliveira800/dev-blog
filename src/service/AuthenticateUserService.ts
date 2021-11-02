@@ -12,6 +12,9 @@ interface IUserResponse {
   name: string;
   login: string;
   avatar_url: string;
+  followers: number;
+  following: number;
+  public_repos: number;
 }
 
 class AuthenticateUserService {
@@ -31,11 +34,19 @@ class AuthenticateUserService {
       options
     );
 
-    const response = await axios.get<IUserResponse>(Strings.gitHubUserUrl, {
-      headers: { authorization: `Bearer ${AccessTokenResponse.access_token}` },
-    });
+    const response = await axios.get<IUserResponse>(
+      Strings.gitHubApiUrl("/user"),
+      {
+        headers: {
+          authorization: `Bearer ${AccessTokenResponse.access_token}`,
+        },
+      }
+    );
 
-    const { id, login, name, avatar_url } = response.data;
+    console.log(response.data);
+
+    const { id, login, name, avatar_url, followers, following, public_repos } =
+      response.data;
 
     let user = await prismaClient.user.findFirst({
       where: { github_id: id },
@@ -48,6 +59,9 @@ class AuthenticateUserService {
           avatar_url,
           login,
           name,
+          followers,
+          following,
+          public_repos,
         },
       });
     }
@@ -58,6 +72,9 @@ class AuthenticateUserService {
           id: user.id,
           name: user.name,
           avatar_url: user.avatar_url,
+          followers: user.followers,
+          following: user.following,
+          public_repos: user.public_repos,
         },
       },
       process.env.JWT_SECRET,

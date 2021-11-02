@@ -4,8 +4,11 @@ abstract class Strings {
   static errorInvalidToken = "Token not provided";
   static errorInvalidGitHubAccessToken = "Token ivalid, try again";
 
-  static gitHubUserUrl = "https://API.github.com/user";
   static gitHubAccessTokenUrl = "https://github.com/login/oauth/access_token";
+
+  static gitHubApiUrl(path: string): string {
+    return `https://api.github.com${path}`;
+  }
 
   static gitHubAuthenticateUrl(clientId: string): string {
     return `https://github.com/login/oauth/authorize?client_id=${clientId}`;

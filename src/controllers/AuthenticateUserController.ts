@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { use } from "@cubos/inject";
 
 import { AuthenticateUserService } from "../service/AuthenticateUserService";
-import { Strings } from "../helpers";
 
 class AuthenticateUserController {
   async handle(requst: Request, response: Response) {

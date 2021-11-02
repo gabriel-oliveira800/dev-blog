@@ -7,6 +7,11 @@ generator client {
   provider = "prisma-client-js"
 }
 
+enum Role {
+  USER
+  ADMIN
+}
+
 model User {
   id String @id @default(uuid())
 
@@ -15,32 +20,11 @@ model User {
   login      String
   avatar_url String
 
-  posts Post[]
+  followers    Int
+  following    Int
+  public_repos Int
+
+  role Role @default(USER)
 
   @@map("users")
-}
-
-model Post {
-  id String @id @default(uuid())
-
-  title   String
-  content String?
-  images  String[]
-
-  user   User   @relation(fields: [userId], references: [id])
-  userId String
-
-  comments Comment[]
-
-  @@map("posts")
-}
-
-model Comment {
-  id String @id @default(uuid())
-
-  text   String
-  userId String
-
-  Post   Post   @relation(fields: [postId], references: [id])
-  postId String
 }

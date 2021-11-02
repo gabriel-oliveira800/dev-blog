@@ -11,13 +11,13 @@ export function ensureAuthenticated(
   response: Response,
   next: NextFunction
 ) {
-  const authTopken = request.headers.authorization;
+  const authToken = request.headers.authorization;
 
-  if (!authTopken) {
+  if (!authToken) {
     return response.status(401).json({ error: Strings.errorInvalidToken });
   }
 
-  const [, token] = authTopken.split(" ");
+  const [, token] = authToken.split(" ");
 
   try {
     const { sub } = verify(token, process.env.JWT_SECRET) as IPayload;
