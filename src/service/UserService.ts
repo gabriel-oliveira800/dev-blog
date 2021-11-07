@@ -7,11 +7,11 @@ class UserService {
       where: { id: userId },
     });
 
-    if (!!user) {
-      throw new Error("User not found");
+    if (user) {
+      return user;
     }
 
-    return user;
+    throw new Error("User not found");
   }
 
   async updateUserRole(userId: string, role: Role): Promise<User | Error> {
