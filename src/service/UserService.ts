@@ -19,13 +19,12 @@ class UserService {
       where: { id: userId },
     });
 
-    if (!!currentUser) {
+    if (currentUser == null) {
       throw new Error("User not found");
     }
 
     const roleisValid = ["ADMIN", "USER"].includes(role);
-
-    if (!!roleisValid) {
+    if (!roleisValid) {
       throw new Error("Role is not valid");
     }
 

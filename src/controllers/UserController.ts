@@ -1,11 +1,7 @@
 import { Request, Response } from "express";
 import { use } from "@cubos/inject";
 
-import axios from "axios";
-
 import { UserService } from "../service/UserService";
-
-import { Strings } from "../helpers";
 
 class UserController {
   async profile(request: Request, response: Response) {

@@ -43,8 +43,6 @@ class AuthenticateUserService {
       }
     );
 
-    console.log(response.data);
-
     const { id, login, name, avatar_url, followers, following, public_repos } =
       response.data;
 
@@ -70,11 +68,9 @@ class AuthenticateUserService {
       {
         user: {
           id: user.id,
+          login: user.login,
           name: user.name,
           avatar_url: user.avatar_url,
-          followers: user.followers,
-          following: user.following,
-          public_repos: user.public_repos,
         },
       },
       process.env.JWT_SECRET,
