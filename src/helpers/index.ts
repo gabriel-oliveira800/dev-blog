@@ -1,3 +1,8 @@
+import Validators from "./validators";
 import Strings from "./strings";
 
-export { Strings };
+const getFileExtension = (fileName: string): string => {
+  return fileName.split(".").pop();
+};
+
+export { Strings, Validators, getFileExtension };
