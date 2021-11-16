@@ -48,9 +48,8 @@ model Follow {
 model Post {
   id String @id @default(uuid())
 
-  message      String
+  message      String?
   images       String[]
-  likes        Int
   isFullAccess Boolean  @default(false)
 
   user   User   @relation(fields: [userId], references: [id])

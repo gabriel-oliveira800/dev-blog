@@ -4,38 +4,21 @@ import { AuthenticateUserController } from "../controllers/AuthenticateUserContr
 import { ensureAuthenticated } from "../middleware/ensureAuthenticated";
 import { FollowsController } from "../controllers/FollowsControllers";
 import { UserController } from "../controllers/UserController";
+import { FeedController } from "../controllers/FeedController";
+import { feedHandleFiles } from "../config/upload";
 
 const router = Router();
 
 router.post("/authenticate", new AuthenticateUserController().handle);
 
-router.get("/post/latest", (req, res) => {
-  const messages = [
-    {
-      id: Math.random(),
-      message:
-        "Não vejo a hora de começar esse evento, com certeza vai ser o melhor de todos os tempos, vamooo pra cima! 🔥🔥",
-      name: "Gabriel Oliveira",
-      avatar_url: "https://github.com/gabriel-oliveira800.png",
-    },
-    {
-      id: Math.random(),
-      message:
-        "Não vejo a hora de começar esse evento, com certeza vai ser o melhor de todos os tempos, vamooo pra cima! 🔥🔥",
-      name: "Gabriel Oliveira",
-      avatar_url: "https://github.com/gabriel-oliveira800.png",
-    },
-    {
-      id: Math.random(),
-      message:
-        "Não vejo a hora de começar esse evento, com certeza vai ser o melhor de todos os tempos, vamooo pra cima! 🔥🔥",
-      name: "Gabriel Oliveira",
-      avatar_url: "https://github.com/gabriel-oliveira800.png",
-    },
-  ];
+router.get("/feed/latest", new FeedController().lastesFeed);
 
-  return res.json({ data: messages });
-});
+router.post(
+  "/feed",
+  ensureAuthenticated,
+  feedHandleFiles,
+  new FeedController().create
+);
 
 router.get("/profile", ensureAuthenticated, new UserController().profile);
 router.put("/roles", ensureAuthenticated, new UserController().updateUserRoles);

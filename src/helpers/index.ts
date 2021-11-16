@@ -1,8 +1,14 @@
 import Validators from "./validators";
 import Strings from "./strings";
 
-const getFileExtension = (fileName: string): string => {
-  return fileName.split(".").pop();
+export enum ENVIRONMENT {
+  development = "development",
+  production = "production",
+}
+
+const isDevelopment = (): boolean => {
+  const environment = ENVIRONMENT[process.env.ENVIRONMENT];
+  return environment === ENVIRONMENT.development;
 };
 
-export { Strings, Validators, getFileExtension };
+export { Strings, Validators, isDevelopment };
