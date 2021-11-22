@@ -31,6 +31,18 @@ class FeedController {
     }
   }
 
+  async deleteFeedById(request: Request, response: Response) {
+    const { feedId } = request.params;
+    const user_id = request.user_id;
+
+    try {
+      const result = await use(FeedService).deleteFeedById(user_id, feedId);
+      return response.json(result);
+    } catch (error) {
+      return response.status(401).json({ error: error.message });
+    }
+  }
+
   async lastesFeed(request: Request, response: Response) {
     const user_id = request.user_id;
     try {

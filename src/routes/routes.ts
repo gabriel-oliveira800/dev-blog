@@ -20,6 +20,12 @@ router.post(
   new FeedController().create
 );
 
+router.delete(
+  "/feed/:feedId",
+  ensureAuthenticated,
+  new FeedController().deleteFeedById
+);
+
 router.get("/profile", ensureAuthenticated, new UserController().profile);
 router.put("/roles", ensureAuthenticated, new UserController().updateUserRoles);
 

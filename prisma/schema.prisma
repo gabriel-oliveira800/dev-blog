@@ -29,8 +29,8 @@ model User {
 
   Follow Follow[]
   Post   Post[]
+  Like   Like[]
 
-  Like Like[]
   @@map("users")
 }
 

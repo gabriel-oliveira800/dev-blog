@@ -1,5 +1,7 @@
+import { use } from "@cubos/inject";
 import { Post } from "@prisma/client";
 import prismaClient from "../prisma";
+import { FilesService } from "./FilesService";
 
 interface Feed {
   userId: string;
@@ -30,11 +32,26 @@ class FeedService {
   async feedLastet(userId: string): Promise<Post[]> {
     const posts = await prismaClient.post.findMany({
       include: { user: true },
-      orderBy: { created_at: "asc" },
+      orderBy: { created_at: "desc" },
       where: { userId, isFullAccess: true },
     });
 
     return posts;
+  }
+
+  async deleteFeedById(userId: string, feeId: string): Promise<Post | Error> {
+    const currentPost = await prismaClient.post.findFirst({
+      where: { id: feeId, userId },
+    });
+
+    if (currentPost == null) {
+      throw new Error("Feed not found");
+    }
+
+    currentPost.images.forEach((image) => use(FilesService).deleteFile(image));
+    const post = await prismaClient.post.delete({ where: { id: feeId } });
+
+    return post;
   }
 }
 

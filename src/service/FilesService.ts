@@ -53,6 +53,14 @@ class FilesService {
 
     return null;
   }
+
+  deleteFile(fileName: string): void {
+    if (!isDevelopment()) return;
+
+    if (fs.existsSync(`./uploads/${fileName}`)) {
+      fs.unlinkSync(`./uploads/${fileName}`);
+    }
+  }
 }
 
 export { FilesService };
