@@ -1,5 +1,5 @@
 import { use } from "@cubos/inject";
-import { Post } from "@prisma/client";
+import { Post, Role } from "@prisma/client";
 import prismaClient from "../prisma";
 import { FilesService } from "./FilesService";
 
@@ -8,6 +8,12 @@ interface Feed {
   message: string;
   images: string[];
   isVisible: boolean;
+}
+
+interface DeleteFeedRequest {
+  feedId: string;
+  userId: string;
+  adminId: string;
 }
 
 class FeedService {
@@ -29,6 +35,16 @@ class FeedService {
     return feed;
   }
 
+  async getAllFeeds(limits: number): Promise<Post[]> {
+    const posts = await prismaClient.post.findMany({
+      take: limits,
+      include: { user: true },
+      orderBy: { created_at: "desc" },
+    });
+
+    return posts;
+  }
+
   async feedLastet(userId: string): Promise<Post[]> {
     const posts = await prismaClient.post.findMany({
       include: { user: true },
@@ -48,10 +64,30 @@ class FeedService {
       throw new Error("Feed not found");
     }
 
-    currentPost.images.forEach((image) => use(FilesService).deleteFile(image));
     const post = await prismaClient.post.delete({ where: { id: feeId } });
+    currentPost.images.forEach((image) => use(FilesService).deleteFile(image));
 
     return post;
+  }
+
+  async deleteFeedByIdWithAdmin({
+    feedId,
+    userId,
+    adminId,
+  }: DeleteFeedRequest): Promise<Post | Error> {
+    const adminUser = await prismaClient.user.findFirst({
+      where: { id: adminId },
+    });
+
+    if (adminUser === null) {
+      throw new Error("User not found");
+    }
+
+    if (adminUser.role !== Role.ADMIN) {
+      throw new Error("User is not admin");
+    }
+
+    return await this.deleteFeedById(userId, feedId);
   }
 }
 

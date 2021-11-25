@@ -31,6 +31,33 @@ class FeedController {
     }
   }
 
+  async getAllFeeds(request: Request, response: Response) {
+    const { limits } = request.query;
+    try {
+      if (limits !== undefined) {
+        const take = parseInt(limits as string);
+        const result = await use(FeedService).getAllFeeds(take ?? 20);
+
+        return response.json(result);
+      }
+
+      const result = await use(FeedService).getAllFeeds(10);
+      return response.json(result);
+    } catch (error) {
+      return response.status(401).json({ error: error.message });
+    }
+  }
+
+  async lastesFeed(request: Request, response: Response) {
+    const user_id = request.user_id;
+    try {
+      const result = await use(FeedService).feedLastet(user_id);
+      return response.json(result);
+    } catch (error) {
+      return response.status(401).json({ error: error.message });
+    }
+  }
+
   async deleteFeedById(request: Request, response: Response) {
     const { feedId } = request.params;
     const user_id = request.user_id;
@@ -43,10 +70,16 @@ class FeedController {
     }
   }
 
-  async lastesFeed(request: Request, response: Response) {
-    const user_id = request.user_id;
+  async deleteFeedByIdWithAdmin(request: Request, response: Response) {
+    const { feedId, userId } = request.params;
+    const adminId = request.user_id;
+
     try {
-      const result = await use(FeedService).feedLastet(user_id);
+      const result = await use(FeedService).deleteFeedByIdWithAdmin({
+        feedId,
+        userId,
+        adminId,
+      });
       return response.json(result);
     } catch (error) {
       return response.status(401).json({ error: error.message });

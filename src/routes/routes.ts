@@ -13,6 +13,8 @@ router.post("/authenticate", new AuthenticateUserController().handle);
 
 router.get("/feed/latest", new FeedController().lastesFeed);
 
+router.get("/feeds", new FeedController().getAllFeeds);
+
 router.post(
   "/feed",
   ensureAuthenticated,
@@ -24,6 +26,12 @@ router.delete(
   "/feed/:feedId",
   ensureAuthenticated,
   new FeedController().deleteFeedById
+);
+
+router.delete(
+  "/admin/feed/:userId/:feedId",
+  ensureAuthenticated,
+  new FeedController().deleteFeedByIdWithAdmin
 );
 
 router.get("/profile", ensureAuthenticated, new UserController().profile);
