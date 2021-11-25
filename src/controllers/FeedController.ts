@@ -32,16 +32,13 @@ class FeedController {
   }
 
   async getAllFeeds(request: Request, response: Response) {
-    const { limits } = request.query;
+    const { limit, page } = request.query;
     try {
-      if (limits !== undefined) {
-        const take = parseInt(limits as string);
-        const result = await use(FeedService).getAllFeeds(take ?? 20);
+      const result = await use(FeedService).getAllFeeds({
+        page: parseInt(page as string) || 1,
+        limit: parseInt(limit as string) || 20,
+      });
 
-        return response.json(result);
-      }
-
-      const result = await use(FeedService).getAllFeeds(10);
       return response.json(result);
     } catch (error) {
       return response.status(401).json({ error: error.message });

@@ -16,6 +16,11 @@ interface DeleteFeedRequest {
   adminId: string;
 }
 
+interface FeedPaginate {
+  page?: number;
+  limit?: number;
+}
+
 class FeedService {
   async createFeed({
     userId,
@@ -35,10 +40,13 @@ class FeedService {
     return feed;
   }
 
-  async getAllFeeds(limits: number): Promise<Post[]> {
+  async getAllFeeds({ page, limit }: FeedPaginate): Promise<Post[]> {
+    const ship = (page - 1) * limit;
+
     const posts = await prismaClient.post.findMany({
-      take: limits,
+      take: limit,
       include: { user: true },
+      skip: ship > 0 ? ship : 0,
       orderBy: { created_at: "desc" },
     });
 
