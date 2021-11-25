@@ -56,10 +56,10 @@ class AuthenticateUserService {
           github_id: id,
           avatar_url,
           login,
-          name,
           followers,
           following,
           public_repos,
+          name: name || login,
         },
       });
     }
