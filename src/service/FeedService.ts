@@ -21,6 +21,11 @@ interface FeedPaginate {
   limit?: number;
 }
 
+interface FeedPaginateResult {
+  total: number;
+  feeds: Post[];
+}
+
 class FeedService {
   async createFeed({
     userId,
@@ -40,17 +45,23 @@ class FeedService {
     return feed;
   }
 
-  async getAllFeeds({ page, limit }: FeedPaginate): Promise<Post[]> {
+  async getAllFeeds({
+    page,
+    limit,
+  }: FeedPaginate): Promise<FeedPaginateResult> {
     const ship = (page - 1) * limit;
 
-    const posts = await prismaClient.post.findMany({
+    const count = await prismaClient.post.count();
+    const total = Math.ceil(count / limit);
+
+    const feeds = await prismaClient.post.findMany({
       take: limit,
       skip: ship > 0 ? ship : 0,
       orderBy: { created_at: "desc" },
       include: { user: true, Like: true },
     });
 
-    return posts;
+    return { total, feeds };
   }
 
   async feedLastet(userId: string): Promise<Post[]> {
