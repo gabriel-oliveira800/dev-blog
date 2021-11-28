@@ -39,7 +39,7 @@ class FeedController {
         limit: parseInt(limit as string) || 20,
       });
 
-      return response.json(result);
+      return response.status(200).json(result);
     } catch (error) {
       return response.status(401).json({ error: error.message });
     }
@@ -79,6 +79,7 @@ class FeedController {
       });
       return response.json(result);
     } catch (error) {
+      console.log(error.message);
       return response.status(401).json({ error: error.message });
     }
   }

@@ -45,9 +45,9 @@ class FeedService {
 
     const posts = await prismaClient.post.findMany({
       take: limit,
-      include: { user: true },
       skip: ship > 0 ? ship : 0,
       orderBy: { created_at: "desc" },
+      include: { user: true, Like: true },
     });
 
     return posts;

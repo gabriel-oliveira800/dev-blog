@@ -1,3 +1,5 @@
+import "dotenv/config";
+
 import { Validators, isDevelopment } from "../helpers";
 import fs from "fs";
 
