@@ -25,6 +25,10 @@ export function ensureAuthenticated(
 
     return next();
   } catch (error) {
+    if (error.message === "jwt expired") {
+      return response.status(412).json({ error: error.message });
+    }
+
     return response.status(401).json({ error: error.message });
   }
 }
